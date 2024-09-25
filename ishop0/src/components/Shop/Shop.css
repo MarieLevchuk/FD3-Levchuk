@@ -1,0 +1,17 @@
+.Shop__info{
+    border: 2px solid #712020;
+    border-radius: 7px;
+    background-color: #efa7a7;
+    max-width: 30%;
+    margin: 5px auto;
+    text-align: center;
+}
+
+.Shop__name{
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.Shop__address{
+    font-size: 70%;
+}
