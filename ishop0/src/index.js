@@ -9,7 +9,7 @@ import goodsArr from './goods.json';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Shop shopname="iShop - 0" address="221b Baker St, Marylebone, London"/>
+    <Shop shopname="iShop - 1" address="221b Baker St, Marylebone, London"/>
     <GoodsGrid goods={goodsArr}/>
   </React.StrictMode>
 );
