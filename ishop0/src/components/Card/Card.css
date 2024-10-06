@@ -9,6 +9,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    cursor: pointer;
+}
+
+.Card.selected{
+    background-color: #cbd0ef;
 }
 
 .Card__img img{

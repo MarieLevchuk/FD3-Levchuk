@@ -3,15 +3,22 @@ import './GoodsGrid.css';
 import Card from "../Card/Card.jsx";
 
 export default class GoodsGrid extends React.Component{
+    state ={
+        goods: this.props.goods,
+        isSelected: 0
+    };
+
+    selectItem = (id) => {
+        this.setState({isSelected: id});
+    }
     
     render(){
-        const cards = this.props.goods.map( v =>
-            <Card key={v.id} model={v} />
-        );
 
         return (
             <div className="Goods-grid">
-               {cards} 
+               {
+                    this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} isSelected={this.state.isSelected}/>)
+               } 
             </div>
         );
     }

@@ -2,9 +2,14 @@ import React from "react";
 import './Card.css';
 
 export default class Card extends React.Component{
+
+    selectItem = e => {
+        this.props.cbSelectItem(e.currentTarget.id);
+    }
+
     render(){
         return(
-            <div className="Card">
+            <div id={this.props.model.id} className={ (this.props.isSelected == this.props.model.id)?'Card selected' : 'Card'} onClick={this.selectItem}>
                 <div className="Card__img">
                     <img src={`img/${this.props.model.url??'noimg.jpg'}`} alt="" />
                 </div>
