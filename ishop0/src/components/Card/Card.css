@@ -40,3 +40,9 @@
 .Card__quantity{
     margin: 2px 5px;
 }
+
+.Card__delete-btn{
+    margin-top: auto;
+    margin-bottom: 5px;
+    cursor: pointer;
+}

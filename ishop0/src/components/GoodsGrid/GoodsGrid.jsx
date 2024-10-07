@@ -11,13 +11,19 @@ export default class GoodsGrid extends React.Component{
     selectItem = (id) => {
         this.setState({isSelected: id});
     }
+
+    deleteItem = (id) => {
+        let goodsCopy = JSON.parse(JSON.stringify(this.state.goods));
+        console.log(goodsCopy);
+        
+    }
     
     render(){
 
         return (
             <div className="Goods-grid">
                {
-                    this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} isSelected={this.state.isSelected}/>)
+                    this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
                } 
             </div>
         );

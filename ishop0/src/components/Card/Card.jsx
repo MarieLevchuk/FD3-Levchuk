@@ -6,6 +6,12 @@ export default class Card extends React.Component{
     selectItem = e => {
         this.props.cbSelectItem(e.currentTarget.id);
     }
+    
+    deleteItem = e => {
+        console.log(e.target.parentNode.id);
+        
+        this.props.cbDeleteItem(e.target.parentNode.id);
+    }
 
     render(){
         return(
@@ -20,6 +26,8 @@ export default class Card extends React.Component{
                     <div className="Card__quantity">В наличии: {this.props.model.quantity}</div>
                     <div className="Card__price">${this.props.model.price}</div>
                 </div>
+
+                <button className="Card__delete-btn" onClick={this.deleteItem}>Удалить</button>
             </div>
         );
     }
