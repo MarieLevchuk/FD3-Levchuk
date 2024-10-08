@@ -4,13 +4,17 @@ import './Card.css';
 export default class Card extends React.Component{
 
     selectItem = e => {
+        if(e.target.className === 'Card__delete-btn'){
+            return;
+        }
+        
         this.props.cbSelectItem(e.currentTarget.id);
     }
     
-    deleteItem = e => {
-        console.log(e.target.parentNode.id);
-        
-        this.props.cbDeleteItem(e.target.parentNode.id);
+    deleteItem = e => {     
+        if(window.confirm('Удалить товар?')){
+            this.props.cbDeleteItem(e.target.parentNode.id);
+        }
     }
 
     render(){

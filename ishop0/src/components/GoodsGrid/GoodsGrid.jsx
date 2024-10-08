@@ -14,8 +14,7 @@ export default class GoodsGrid extends React.Component{
 
     deleteItem = (id) => {
         let goodsCopy = JSON.parse(JSON.stringify(this.state.goods));
-        console.log(goodsCopy);
-        
+        this.setState({goods: goodsCopy.filter(good => good.id != id)});
     }
     
     render(){
