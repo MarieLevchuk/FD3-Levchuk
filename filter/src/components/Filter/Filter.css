@@ -1,0 +1,20 @@
+.Filter{
+    margin: 10px;
+    width: 400px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Filter__tools{
+    display: flex;
+    margin: 10px;
+}
+
+.Filter__words{
+    margin: 10px;
+    height: 100px;
+    border: 1px solid black;
+    overflow-y: scroll;
+    white-space: break-spaces;
+}
