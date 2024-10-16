@@ -3,6 +3,7 @@ import './GoodsGrid.css';
 import Card from "../Card/Card.jsx";
 
 import shopEvents from "../../events/shopEvents";
+import Info from "../Info/Info.jsx";
 
 export default class GoodsGrid extends React.Component{
     state ={
@@ -33,10 +34,17 @@ export default class GoodsGrid extends React.Component{
     render(){
 
         return (
-            <div className="Goods-grid">
-               {
-                    this.state.goods.map( v => <Card key={v.id} model={v} isSelected={this.state.isSelected}/>)
-               } 
+            <div className="content">
+                <div className="Goods-grid">
+                   {
+                        this.state.goods.map( v => <Card key={v.id} model={v} isSelected={this.state.isSelected}/>)
+                   } 
+                </div>
+
+                {
+                    (this.state.isSelected > 0) &&
+                    <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}/>
+                }
             </div>
         );
     }
