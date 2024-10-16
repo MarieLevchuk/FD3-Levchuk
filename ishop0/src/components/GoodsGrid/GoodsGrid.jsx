@@ -1,6 +1,7 @@
 import React from "react";
 import './GoodsGrid.css';
 import Card from "../Card/Card.jsx";
+import Info from "../Info/Info.jsx";
 
 export default class GoodsGrid extends React.Component{
     state ={
@@ -20,10 +21,16 @@ export default class GoodsGrid extends React.Component{
     render(){
 
         return (
-            <div className="Goods-grid">
-               {
-                    this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
-               } 
+            <div className="content">
+                <div className="Goods-grid">
+                   {
+                        this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
+                   } 
+                </div>
+                {
+                    (this.state.isSelected > 0)&&(this.state.goods.find(({id}) => id == this.state.isSelected))&&
+                    <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
+                }
             </div>
         );
     }

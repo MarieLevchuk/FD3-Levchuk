@@ -8,10 +8,10 @@ export default class Card extends React.Component{
     }
     
     deleteItem = e => {
+        e.stopPropagation();
         if(window.confirm('Удалить товар?')){
             this.props.cbDeleteItem(e.target.parentNode.id);
         }
-        e.stopPropagation();
     }
 
     render(){
