@@ -1,20 +1,20 @@
 import React from "react";
 import './Card.css';
-import EventEmitter from "events";
 
 import shopEvents from "../../events/shopEvents";
 
 export default class Card extends React.Component{
 
     selectItem = e => {
-        this.props.cbSelectItem(e.currentTarget.id);
+        shopEvents.emit('selectItem', e.currentTarget.id);
     }
     
     deleteItem = e => {
-        if(window.confirm('Удалить товар?')){
-            this.props.cbDeleteItem(e.target.parentNode.id);
-        }
         e.stopPropagation();
+        
+        if(window.confirm('Удалить товар?')){
+            shopEvents.emit('deleteItem', e.target.parentNode.id);
+        }
     }
 
     editItem = (e) => {
