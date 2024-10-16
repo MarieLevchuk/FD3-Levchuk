@@ -6,22 +6,14 @@ export default class RainbowFrame extends React.Component {
         if (!this.props.colors || this.props.colors.length === 0 ) {
           return this.props.children;
         }
-
-        if (this.props.colors.length === 1) {
-            return (
-                <div className="Rainbow-frame" style={{borderColor:this.props.colors}}>
-                    <RainbowFrame>{this.props.children}</RainbowFrame>
-                </div>
-            );
-        } else {
-            let newColors = this.props.colors.slice();   
         
-            return (
-                <div className="Rainbow-frame" style={{borderColor:newColors.pop()}}>
-                    <RainbowFrame colors={newColors}>{this.props.children}</RainbowFrame>
-                </div>
-            );
-        }
+        let newColors = this.props.colors.slice();   
+    
+        return (
+            <div className="Rainbow-frame" style={{borderColor:newColors.pop()}}>
+                <RainbowFrame colors={newColors}>{this.props.children}</RainbowFrame>
+            </div>
+        );
     }
 };
 
