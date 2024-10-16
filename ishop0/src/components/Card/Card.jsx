@@ -14,6 +14,11 @@ export default class Card extends React.Component{
         }
     }
 
+    editItem = e => {
+        e.stopPropagation();
+        
+    }
+
     render(){
         return(
             <div id={this.props.model.id} className={ (this.props.isSelected == this.props.model.id)?'Card selected' : 'Card'} onClick={this.selectItem}>
@@ -28,6 +33,7 @@ export default class Card extends React.Component{
                     <div className="Card__price">${this.props.model.price}</div>
                 </div>
 
+                <button className="Card__delete-btn" onClick={this.editItem}>Редактировать</button>
                 <button className="Card__delete-btn" onClick={this.deleteItem}>Удалить</button>
             </div>
         );
