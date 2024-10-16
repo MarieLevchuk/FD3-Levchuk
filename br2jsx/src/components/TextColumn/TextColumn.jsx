@@ -1,6 +1,5 @@
 import React from 'react';
 import './TextColumn.css';
-import Helper from '../Helper/Helper.jsx';
 
 export default class TextColumn extends React.Component{
     render(){
@@ -8,8 +7,21 @@ export default class TextColumn extends React.Component{
         return (
             <div className="Text-column">
                 {
-                    arr.map( (item, index )=><Helper key={index}>{item}</Helper>)
-                }                
+                    arr.map( (item, index )=>{
+                        if(index < arr.length-1){
+                            return (
+                                <>
+                                    {item}
+                                    <br />
+                                </>
+                            )
+                        } else {
+                            return (
+                                item
+                            )
+                        }
+                    })
+                }      
             </div>
         );
     }
