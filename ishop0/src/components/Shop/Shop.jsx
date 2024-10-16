@@ -3,7 +3,6 @@ import './Shop.css';
 import ShopSign from '../ShopSign/ShopSign';
 import GoodsGrid from '../GoodsGrid/GoodsGrid';
 
-
 class Shop extends React.Component {
     render() {
       return (

@@ -1,5 +1,8 @@
 import React from "react";
 import './Card.css';
+import EventEmitter from "events";
+
+import shopEvents from "../../events/shopEvents";
 
 export default class Card extends React.Component{
 
@@ -12,6 +15,11 @@ export default class Card extends React.Component{
             this.props.cbDeleteItem(e.target.parentNode.id);
         }
         e.stopPropagation();
+    }
+
+    editItem = (e) => {
+        e.stopPropagation();
+        shopEvents.emit('showInfo', 'jocker');
     }
 
     render(){
@@ -28,6 +36,7 @@ export default class Card extends React.Component{
                     <div className="Card__price">${this.props.model.price}</div>
                 </div>
 
+                <button className="Card__delete-btn" onClick={this.editItem}>Редактировать</button>
                 <button className="Card__delete-btn" onClick={this.deleteItem}>Удалить</button>
             </div>
         );
