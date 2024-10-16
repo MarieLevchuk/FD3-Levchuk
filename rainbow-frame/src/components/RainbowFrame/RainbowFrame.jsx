@@ -2,42 +2,21 @@ import React from "react";
 import './RainbowFrame.css';
 
 export default class RainbowFrame extends React.Component {
-    render(){
-        if (!this.props.colors || this.props.colors.length === 0 ) {
-          return this.props.children;
+    buildFrame(colors, children){
+        if (!colors || colors.length === 0 ) {
+            return children;
         }
-        
-        let newColors = this.props.colors.slice();   
-    
+          
+        let newColors = colors.slice();   
+      
         return (
             <div className="Rainbow-frame" style={{borderColor:newColors.pop()}}>
-                <RainbowFrame colors={newColors}>{this.props.children}</RainbowFrame>
+              {this.buildFrame(newColors, children)}
             </div>
         );
     }
+
+    render(){
+        return this.buildFrame(this.props.colors, this.props.children);
+    }
 };
-
-
-
-// export default function RainbowFrame ({ colors, children }) {
-//     if (!colors || colors.length === 0 || colors === undefined) {
-//       return children;
-//     }
-
-//     if (colors.length === 1) {
-//         return (
-//             <div className={"Rainbow-frame" } style={{borderColor:colors}}>
-//                 <RainbowFrame>{children}</RainbowFrame>
-//             </div>
-//         );
-//     } else {
-//         let newColors = colors.slice();
-//         let color = newColors.pop();       
-    
-//         return (
-//             <div className={"Rainbow-frame " + color } style={{borderColor:color}}>
-//                 <RainbowFrame colors={newColors}>{children}</RainbowFrame>
-//             </div>
-//         );
-//     }
-// };
