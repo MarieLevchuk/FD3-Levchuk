@@ -36,7 +36,7 @@ export default class Card extends React.Component{
                     <div className="Card__price">${this.props.model.price}</div>
                 </div>
 
-                <button className="Card__delete-btn" onClick={this.editItem}>Редактировать</button>
+                <button className="Card__edit-btn" onClick={this.editItem}>Редактировать</button>
                 <button className="Card__delete-btn" onClick={this.deleteItem}>Удалить</button>
             </div>
         );
