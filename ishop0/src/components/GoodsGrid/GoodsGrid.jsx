@@ -22,15 +22,19 @@ export default class GoodsGrid extends React.Component{
 
         return (
             <div className="content">
+                <div >
+                    <button className="Goods-grid__add-btn">Добавить продукт</button>
+                    {
+                    (this.state.isSelected > 0)&&
+                    <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
+                }
+                </div>
+                
                 <div className="Goods-grid">
                    {
                         this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
                    } 
                 </div>
-                {
-                    (this.state.isSelected > 0)&&
-                    <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
-                }
             </div>
         );
     }

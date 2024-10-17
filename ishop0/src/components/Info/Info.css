@@ -1,7 +1,7 @@
 .Info{
-    min-width: 20%;
+    max-width: 20%;
     padding: 4px;
-    margin: 0 0 auto 0;
+    margin: 4px;
     border: 2px solid #938c8c;
     border-radius: 4px;
 }

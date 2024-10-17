@@ -1,6 +1,12 @@
 .Goods-grid{
-    width: 100%;
+    width: 80%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
+}
+
+.Goods-grid__add-btn{
+    height: 50px;
+    width: 200px;
+    margin: 4px;
 }
