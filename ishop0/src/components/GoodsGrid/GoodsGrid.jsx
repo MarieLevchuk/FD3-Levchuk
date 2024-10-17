@@ -28,7 +28,7 @@ export default class GoodsGrid extends React.Component{
                    } 
                 </div>
                 {
-                    (this.state.isSelected > 0)&&(this.state.goods.find(({id}) => id == this.state.isSelected))&&
+                    (this.state.isSelected > 0)&&
                     <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
                 }
             </div>
