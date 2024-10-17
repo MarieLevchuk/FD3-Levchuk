@@ -2,26 +2,24 @@ import React from 'react';
 import './TextColumn.css';
 
 export default class TextColumn extends React.Component{
+
+    print = (a, index) => {
+        if (index > a.length)
+            return;
+
+        if (index === a.length-1)
+            return a[index];
+
+        if(index < a.length)
+            return <>{a[index]}<br/>{this.print(a, ++index)}</>
+    }
+    
     render(){
         let arr = this.props.text.split(/<br\s?\/?>/);
-        return (
+        
+        return(
             <div className="Text-column">
-                {
-                    arr.map( (item, index )=>{
-                        if(index < arr.length-1){
-                            return (
-                                <>
-                                    {item}
-                                    <br />
-                                </>
-                            )
-                        } else {
-                            return (
-                                item
-                            )
-                        }
-                    })
-                }      
+                {this.print(arr, 0)}
             </div>
         );
     }
