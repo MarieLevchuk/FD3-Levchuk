@@ -16,7 +16,7 @@ export default class Card extends React.Component{
 
     editItem = e => {
         e.stopPropagation();
-        
+        this.props.cbEditItem(e.target.parentNode.id);
     }
 
     render(){
