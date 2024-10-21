@@ -8,12 +8,24 @@ export default class GoodsGrid extends React.Component{
     state ={
         goods: this.props.goods,
         isSelected: 0,
-        mode: '',
-        modelToEdit: 0
+        mode: null,
+        modelToUpdate: null
     };
 
     selectItem = (id) => {
         this.setState({isSelected: id});
+    }
+
+    createItem = (model) => {
+        const goodsCopy = this.state.goods.slice();
+        model.id = goodsCopy[goodsCopy.length - 1].id + 1;
+
+        goodsCopy.push(model);
+        this.setState({goods:goodsCopy}, this.closeForm);
+    }
+
+    updateItem = (model) => {
+        // upd item
     }
 
     deleteItem = (id) => {
@@ -21,8 +33,17 @@ export default class GoodsGrid extends React.Component{
         this.setState({goods: goodsCopy.filter(good => good.id != id)});
     }
 
-    editItem = (id) => {
-        this.setState({mode: 'edit', modelToEdit: id});
+    showEditForm = (id) => {
+        const model = this.state.goods.find((model) => model.id == id);
+        this.setState({mode: 'edit', modelToUpdate: model, isSelected: id});
+    }
+
+    showCreateForm = () => {
+        this.setState({mode: 'create', modelToUpdate: null, isSelected: 0});
+    }
+
+    closeForm = () => {
+        this.setState({mode: null});
     }
     
     render(){
@@ -30,20 +51,20 @@ export default class GoodsGrid extends React.Component{
         return (
             <div className="content">
                 <div >
-                    <button className="Goods-grid__add-btn">Добавить продукт</button>
+                    <button className="Goods-grid__add-btn" onClick={this.showCreateForm}>Добавить продукт</button>
                     {
                         (this.state.isSelected > 0)&&(!this.state.mode)&&
                         <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
                     }
                     {
-                        (this.state.mode==='edit')&&
-                        <Form model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Form>
+                        (this.state.mode)&&
+                        <Form key={this.state.modelToUpdate?.id} mode={this.state.mode} {...this.state.modelToUpdate} cbCreateItem={this.createItem} cbCloseForm={this.closeForm}></Form>
                     }
                 </div>
                 
                 <div className="Goods-grid">
                    {
-                        this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
+                        this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbEditItem={this.showEditForm} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
                    } 
                 </div>
             </div>
