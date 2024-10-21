@@ -25,7 +25,15 @@ export default class GoodsGrid extends React.Component{
     }
 
     updateItem = (model) => {
-        // upd item
+        debugger;
+        const goodsCopy = this.state.goods.slice();
+        goodsCopy.array.forEach(item => {
+            if(item.id === model.id){
+                item = model
+            }
+        });
+        // goodsCopy.push(model);
+        this.setState({goods:goodsCopy}, this.closeForm);
     }
 
     deleteItem = (id) => {
@@ -58,7 +66,7 @@ export default class GoodsGrid extends React.Component{
                     }
                     {
                         (this.state.mode)&&
-                        <Form key={this.state.modelToUpdate?.id} mode={this.state.mode} {...this.state.modelToUpdate} cbCreateItem={this.createItem} cbCloseForm={this.closeForm}></Form>
+                        <Form key={this.state.modelToUpdate?.id} mode={this.state.mode} {...this.state.modelToUpdate} cbCreateItem={this.createItem} cbUpdateItem={this.updateItem} cbCloseForm={this.closeForm}></Form>
                     }
                 </div>
                 
