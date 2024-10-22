@@ -2,16 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import RainbowFrame from './components/RainbowFrame/RainbowFrame';
+import DoubleButton from './components/DoubleButton/DoubleButton';
+import withRainbowFrame from './components/withRainbowFrame';
 
 let colors = ['red','orange', 'yellow','green', '#00BFFF', 'blue', 'purple'];
+
+let FramedDoubleButton = withRainbowFrame(colors)(DoubleButton);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <RainbowFrame colors={colors}>
-         hello 
-      </RainbowFrame>
+      <FramedDoubleButton caption1="я из лесу" caption2="мороз" cbPressed={ text => alert(text) }>вышел, был сильный</FramedDoubleButton>
   </React.StrictMode>
 );
 
