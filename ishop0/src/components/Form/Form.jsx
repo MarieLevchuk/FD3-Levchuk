@@ -17,12 +17,13 @@ export default class Form extends React.Component{
     }
 
     inputValueChange = (e) => {
+        
         let input = e.target.name;
         let value = e.target.value;
 
         this.validateValue(input, value);
 
-        this.setState({[input]: value});
+        this.setState({[input]: value}, this.handleChanges(true));
         // if(!this.state.errors[input]){
             
         // }
@@ -59,13 +60,16 @@ export default class Form extends React.Component{
 
     }
 
+    handleChanges = (status) => {
+        this.props.cbHandleChanges(status);
+    }
+
     saveForm = () => {
-        debugger;
         let model = {
             name: this.state.name,
             price: this.state.price,
-            url: this.state.url,
-            quantity: this.state.quantity
+            quantity: this.state.quantity,
+            url: this.state.url
          }
 
         if(this.props.mode === 'create'){
@@ -73,12 +77,14 @@ export default class Form extends React.Component{
         }
 
         if(this.props.mode === 'edit'){
-            model.id = this.state.id;
+            model.id = this.props.id;
             this.props.cbUpdateItem(model);
         }
+        this.handleChanges(false);
     }
 
     closeForm = () => {
+        this.handleChanges(false);
         this.props.cbCloseForm();
     }
 
@@ -86,9 +92,13 @@ export default class Form extends React.Component{
         return (
             <div className="Form">
                 <div className="Form__title">{this.props.mode}</div>
-                <div className="Form__id">
-                    <span>ID: {this.props.id}</span>
-                </div>
+                {
+                    (this.props.mode === 'edit')&&
+                        <div className="Form__id">
+                            <span>ID: {this.props.id}</span>
+                        </div>
+                }
+                
                 <div className="Form__name">
                     <span>Наименование </span>
                     <input type="text" name="name" value={this.state.name ?? ''} onChange={this.inputValueChange}/>
