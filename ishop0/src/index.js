@@ -8,7 +8,7 @@ import goodsArr from './goods.json';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Shop shopName="iShop - 1" address="221b Baker St, Marylebone, London" goods={goodsArr}/>
+    <Shop shopName="iShop - 3" address="221b Baker St, Marylebone, London" goods={goodsArr}/>
   </React.StrictMode>
 );
 

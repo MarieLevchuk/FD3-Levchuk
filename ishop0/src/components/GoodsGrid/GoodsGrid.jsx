@@ -14,6 +14,9 @@ export default class GoodsGrid extends React.Component{
     };
 
     selectItem = (id) => {
+        if(!this.state.isModifying){
+            this.setState({mode: null});
+        }
         this.setState({isSelected: id});
     }
 
@@ -63,20 +66,20 @@ export default class GoodsGrid extends React.Component{
         return (
             <div className="content">
                 <div >
-                    <button className="Goods-grid__add-btn" onClick={this.showCreateForm}>Добавить продукт</button>
+                    <button className="Goods-grid__add-btn" disabled={this.state.isModifying}  onClick={this.showCreateForm}>Добавить продукт</button>
                     {
                         (this.state.isSelected > 0)&&(!this.state.mode)&&
                         <Info model={this.state.goods.find(({id}) => id == this.state.isSelected)}></Info>
                     }
                     {
                         (this.state.mode)&&
-                        <Form key={this.state.modelToUpdate?.id} mode={this.state.mode} {...this.state.modelToUpdate} cbHandleChanges={this.handleChanges} cbCreateItem={this.createItem} cbUpdateItem={this.updateItem} cbCloseForm={this.closeForm}></Form>
+                        <Form key={this.state.modelToUpdate?.id} mode={this.state.mode} isModifying={this.state.isModifying} {...this.state.modelToUpdate} cbHandleChanges={this.handleChanges} cbCreateItem={this.createItem} cbUpdateItem={this.updateItem} cbCloseForm={this.closeForm}></Form>
                     }
                 </div>
                 
                 <div className="Goods-grid">
                    {
-                        this.state.goods.map( v => <Card key={v.id} model={v} cbSelectItem={this.selectItem} cbEditItem={this.showEditForm} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
+                        this.state.goods.map( v => <Card key={v.id} model={v} isModifying={this.state.isModifying} cbSelectItem={this.selectItem} cbEditItem={this.showEditForm} cbDeleteItem={this.deleteItem} isSelected={this.state.isSelected}/>)
                    } 
                 </div>
             </div>

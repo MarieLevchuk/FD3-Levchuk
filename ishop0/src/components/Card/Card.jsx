@@ -4,7 +4,9 @@ import './Card.css';
 export default class Card extends React.Component{
 
     selectItem = e => {
-        this.props.cbSelectItem(e.currentTarget.id);
+        if(!this.props.isModifying){
+            this.props.cbSelectItem(e.currentTarget.id);
+        }
     }
     
     deleteItem = e => {
@@ -15,7 +17,7 @@ export default class Card extends React.Component{
     }
 
     editItem = e => {
-        // e.stopPropagation();
+        e.stopPropagation();
         this.props.cbEditItem(e.target.parentNode.id);
     }
 
@@ -33,8 +35,8 @@ export default class Card extends React.Component{
                     <div className="Card__price">${this.props.model.price}</div>
                 </div>
 
-                <button className="Card__edit-btn" onClick={this.editItem}>Редактировать</button>
-                <button className="Card__delete-btn" onClick={this.deleteItem}>Удалить</button>
+                <button className="Card__edit-btn" disabled={this.props.isModifying} onClick={this.editItem}>Редактировать</button>
+                <button className="Card__delete-btn" disabled={this.props.isModifying} onClick={this.deleteItem}>Удалить</button>
             </div>
         );
     }

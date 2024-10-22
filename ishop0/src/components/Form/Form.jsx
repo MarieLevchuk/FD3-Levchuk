@@ -9,10 +9,25 @@ export default class Form extends React.Component{
         quantity: this.props.quantity,
 
         errors: {
-            name: '',
-            price: '',
+            name: (this.props.mode === 'create') ? this.getErrorMessage('required') : '',
+            price: (this.props.mode === 'create') ? this.getErrorMessage('required') :'',
             url: '',
             quantity: ''
+        }
+    }
+
+    getErrorMessage(rule, val = null) {
+        switch (rule) {
+            case 'required':
+              return 'Поле обязательно для заполнения';
+            case 'min':
+              return `Поле должно содержать не менее ${val} символов`;
+            case 'max':
+              return `Поле должно содержать не более ${val} символов`;
+            case 'number':
+                return 'Поле должно содержать только цифры';
+            default:
+              return '';
         }
     }
 
@@ -30,33 +45,35 @@ export default class Form extends React.Component{
     }
 
     validateValue = (input, value) => {
-        //  let errors = {
-        //     name: '',
-        //     price: '',
-        //     url: '',
-        //     quantity: ''
-        // }
-        // if(input === 'name'){
-        //     if(value.trim().length < 3){
-        //         errors.name = 'Поле должно содержать не менее 3-х символов';
-        //         // this.setState({errors: {[input]: 'Поле должно содержать не менее 3-х символов'}})
-        //     } else if(!value.trim()){
-        //         this.setState({errors: {[input]: 'Поле обязательно для заполнения'}})
-        //     } else {
-        //         this.setState({errors: {[input]: ''}})
-        //     }
-        // }
-        // if(input === 'url'){
-        //     if(!value.trim()){
-        //         this.setState({errors: {[input]: 'Поле обязательно для заполнения'}})
-        //     } else {
-        //         this.setState({errors: {[input]: ''}})
-        //     }
-        // }
+        let errors = {...this.state.errors};
 
-       
+        if(input === 'name'){
+            if(!value.trim()){
+                errors[input] = this.getErrorMessage('required');
+            } else if(value.trim().length < 3){
+                errors[input] = this.getErrorMessage('min', 3);
+            } else {
+                errors[input] = '';
+            }
+        }
+        if(input === 'price'){
+            if(!value.trim()){
+                errors[input] = this.getErrorMessage('required');
+            } else if(!/^\d+$/.test(value)){
+                errors[input] = this.getErrorMessage('number');
+            } else {
+                errors[input] = '';
+            }
+        }
+        if(input === 'quantity'){
+            if(!/^\d+$/.test(value)){
+                errors[input] = this.getErrorMessage('number');
+            } else {
+                errors[input] = '';
+            }
+        }
 
-        // this.setState({errors: errors})
+        this.setState({errors: errors});
 
     }
 
@@ -91,12 +108,18 @@ export default class Form extends React.Component{
     render(){
         return (
             <div className="Form">
-                <div className="Form__title">{this.props.mode}</div>
+                {
+                    (this.props.mode === 'create')&&
+                    <div className="Form__title" style={{fontWeight:500}}>Добавить новый продукт</div>
+                }
                 {
                     (this.props.mode === 'edit')&&
-                        <div className="Form__id">
-                            <span>ID: {this.props.id}</span>
-                        </div>
+                        <>
+                            <div className="Form__title" style={{fontWeight:500}}>Редактировать запись</div>
+                            <div className="Form__id">
+                                <span>ID: {this.props.id}</span>
+                            </div>
+                        </>
                 }
                 
                 <div className="Form__name">
@@ -122,11 +145,11 @@ export default class Form extends React.Component{
 
                 {
                     (this.props.mode === 'edit')&&
-                        <button onClick={this.saveForm}>Сохранить</button>
+                        <button disabled={!Object.values(this.state.errors).every(err => err === '')} onClick={this.saveForm}>Сохранить</button>
                 }
                 {
                     (this.props.mode === 'create')&&
-                        <button onClick={this.saveForm}>Добавить</button>
+                        <button disabled={!Object.values(this.state.errors).every(err => err === '')} onClick={this.saveForm}>Добавить</button>
                 }
                 
                 <button onClick={this.closeForm}>Отмена</button>
