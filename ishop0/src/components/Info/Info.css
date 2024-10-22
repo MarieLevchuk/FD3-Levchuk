@@ -1,0 +1,13 @@
+.Info{
+    max-width: 20%;
+    padding: 4px;
+    margin: 4px;
+    border: 2px solid #938c8c;
+    border-radius: 4px;
+}
+
+.Info__name{
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
