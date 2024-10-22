@@ -39,9 +39,6 @@ export default class Form extends React.Component{
         this.validateValue(input, value);
 
         this.setState({[input]: value}, this.handleChanges(true));
-        // if(!this.state.errors[input]){
-            
-        // }
     }
 
     validateValue = (input, value) => {
