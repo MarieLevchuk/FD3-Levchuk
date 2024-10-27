@@ -1,0 +1,6 @@
+{
+  "short_name": "Mobile hw",
+  "name": "Mobile hw",
+  "start_url": ".",
+  "display": "standalone"
+}
