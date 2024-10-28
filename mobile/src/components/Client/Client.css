@@ -1,3 +1,8 @@
+.Client_btns{
+    display: flex;
+    flex-direction: row ;
+}
+
 .Client_status.active{
     background-color: rgb(134, 195, 134);
 }

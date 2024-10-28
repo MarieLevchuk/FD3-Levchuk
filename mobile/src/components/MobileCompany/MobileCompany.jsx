@@ -5,7 +5,8 @@ import clientsEvents from '../../events/clientsEvents.js';
 
 export default class MobileCompany extends React.PureComponent{
     state = {
-        clients: this.props.clients
+        clients: this.props.clients,
+        clientsData: this.props.clients
     }
 
     componentDidMount = () => {
@@ -23,16 +24,61 @@ export default class MobileCompany extends React.PureComponent{
     };
 
     filter = (e) => {
-        console.log(e.target.value);
+        if (e.target.value === 'all'){
+            this.setState({clients: this.state.clientsData});
+        }
+    
+        if (e.target.value === 'active'){
+            let clientsCopy = [...this.state.clientsData];
+            clientsCopy = clientsCopy.filter(item => item.balance > 0);
+            this.setState({clients: clientsCopy});
+        }
+    
+        if (e.target.value === 'blocked'){
+            let clientsCopy = [...this.state.clientsData];
+            clientsCopy = clientsCopy.filter(item => item.balance <= 0);
+            this.setState({clients: clientsCopy});
+        }
     }
 
-    edit = (id) => {
-        console.log(id);
+    getMaxClientId(){
+        
+        let max = this.state.clientsData.reduce((prev, current) => {
+            return (prev.id > current.id) ? prev : current;
+        });
+
+        return max.id;
+    }
+
+    create = () => {
+        let newClient = {
+            id: this.getMaxClientId()+1,
+            firstname: '-',
+            lastname: '-',
+            balance: 0
+        }
+
+        let clientsDataCopy = [...this.state.clientsData];
+        clientsDataCopy.push(newClient);
+
+        this.setState({clients:clientsDataCopy, clientsData: clientsDataCopy});
+    }
+
+    edit = (model) => {
+        let clientsDataCopy = [...this.state.clientsData];
+        clientsDataCopy.forEach((client, index) => {
+            if(client.id == model.id){
+                clientsDataCopy[index] = model;
+                this.setState({clients: clientsDataCopy, clientsData: clientsDataCopy}, () => clientsEvents.emit('close'));
+            }
+        });
         
     }
 
     delete = (id) => {
-        console.log('delete'+id);
+        let clientsDataCopy = this.state.clientsData.filter(item => item.id !=id);
+        let clientsCopy = this.state.clients.filter(item => item.id !=id);
+        this.setState({clients: clientsCopy, clientsData: clientsDataCopy});
     }
 
     render(){
@@ -60,7 +106,7 @@ export default class MobileCompany extends React.PureComponent{
                         }
                     </tbody>
                 </table>
-                <input type="button" value='add new client' />
+                <input type="button" value='add a new client' onClick={this.create} />
             </div>
         );
     }
