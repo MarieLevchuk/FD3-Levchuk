@@ -6,7 +6,9 @@ import clientsEvents from '../../events/clientsEvents.js';
 export default class MobileCompany extends React.PureComponent{
     state = {
         clients: this.props.clients,
-        clientsData: this.props.clients
+        clientsData: this.props.clients,
+
+        filterMode: 'all'
     }
 
     componentDidMount = () => {
@@ -23,26 +25,27 @@ export default class MobileCompany extends React.PureComponent{
         clientsEvents.removeListener('delete', this.delete);
     };
 
-    filter = (e) => {
-        if (e.target.value === 'all'){
+    handleFilter = (e) => {
+        this.setState({filterMode: e.target.value}, this.filter);
+    }
+
+    filter = () => {
+        if (this.state.filterMode === 'all'){
             this.setState({clients: this.state.clientsData});
         }
     
-        if (e.target.value === 'active'){
-            let clientsCopy = [...this.state.clientsData];
-            clientsCopy = clientsCopy.filter(item => item.balance > 0);
-            this.setState({clients: clientsCopy});
+        if (this.state.filterMode === 'active'){
+            let clientsDataCopy = this.state.clientsData.filter(item => item.balance > 0);
+            this.setState({clients: clientsDataCopy});
         }
     
-        if (e.target.value === 'blocked'){
-            let clientsCopy = [...this.state.clientsData];
-            clientsCopy = clientsCopy.filter(item => item.balance <= 0);
-            this.setState({clients: clientsCopy});
+        if (this.state.filterMode === 'blocked'){
+            let clientsDataCopy = this.state.clientsData.filter(item => item.balance <= 0);
+            this.setState({clients: clientsDataCopy});
         }
     }
 
     getMaxClientId(){
-        
         let max = this.state.clientsData.reduce((prev, current) => {
             return (prev.id > current.id) ? prev : current;
         });
@@ -72,7 +75,6 @@ export default class MobileCompany extends React.PureComponent{
                 this.setState({clients: clientsDataCopy, clientsData: clientsDataCopy}, () => clientsEvents.emit('close'));
             }
         });
-        
     }
 
     delete = (id) => {
@@ -85,9 +87,9 @@ export default class MobileCompany extends React.PureComponent{
         return(
             <div className="Mobile-company">
                 <div className="Mobile-company__buttons">
-                    <input type="button" value='all' onClick={this.filter} />
-                    <input type="button" value='active'  onClick={this.filter} />
-                    <input type="button" value='blocked'  onClick={this.filter} />
+                    <input type="button" value='all' onClick={this.handleFilter} />
+                    <input type="button" value='active'  onClick={this.handleFilter} />
+                    <input type="button" value='blocked'  onClick={this.handleFilter} />
                 </div>
                 <table>
                     <thead>

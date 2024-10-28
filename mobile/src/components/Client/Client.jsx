@@ -16,12 +16,10 @@ export default class Client extends React.PureComponent{
 
     componentDidMount = () => {
         clientsEvents.addListener('close', this.close);
-        // clientsEvents.addListener('create', this.create);
     };
 
     componentWillUnmount = () => {
         clientsEvents.removeListener('close', this.close);
-        // clientsEvents.removeListener('create', this.create);
     };
 
     newFirstnameRef = null;
@@ -94,6 +92,7 @@ export default class Client extends React.PureComponent{
 
     render(){
         console.log(`client ${this.props.client.id} render()`);
+
         return(
             <tr id={this.props.client.id} className="Client">
                 <td className="Client_firstname">
