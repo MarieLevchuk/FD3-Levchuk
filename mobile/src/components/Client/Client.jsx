@@ -5,9 +5,6 @@ import clientsEvents from '../../events/clientsEvents.js';
 
 export default class Client extends React.PureComponent{
     state = {
-        firstname: this.props.client.firstname,
-        lastname: this.props.client.lastname,
-        balance: this.props.client.balance,
         status: this.props.client.balance > 0 ? 'active' : 'blocked',
 
         editMode: false,
@@ -36,40 +33,22 @@ export default class Client extends React.PureComponent{
         this.newBalanceRef = ref;
     }
 
-    setNewFirstname = () => {
-        if(this.newFirstnameRef){
-            let firstname=this.newFirstnameRef.value;
-            this.setState({firstname:firstname});
-            return firstname;
-        };
-
-        return this.state.firstname;
-    }
-    setNewLastname = () => {
-        if(this.newLastnameRef){
-            let lastname=this.newLastnameRef.value;
-            this.setState({lastname:lastname});
-            return lastname;
-        };
-
-        return this.state.firstname;
-    }
     setNewBalance = () => {
         if(this.newBalanceRef){
             let balance=this.newBalanceRef.value;
-            this.setState({balance:balance, status:balance > 0 ? 'active' : 'blocked'});
+            this.setState({status:balance > 0 ? 'active' : 'blocked'});
             return balance;
         };
 
-        return this.state.balance;
+        return this.props.client.balance;
     }
 
     save = () => {
         
         let client = {
             id: this.props.client.id,
-            firstname: this.setNewFirstname(),
-            lastname:this.setNewLastname(),
+            firstname: this.newFirstnameRef.value ?? this.props.client.firstname,
+            lastname: this.newLastnameRef.value ?? this.props.client.lastname,
             balance: this.setNewBalance()
         }
 
@@ -98,31 +77,31 @@ export default class Client extends React.PureComponent{
                 <td className="Client_firstname">
                     {
                         (this.state.editMode)&&
-                        <input type="text" ref={this.setNewFirstnameRef} defaultValue={this.state.firstname} />
+                        <input type="text" ref={this.setNewFirstnameRef} defaultValue={this.props.client.firstname} />
                     }
                     {
                         (!this.state.editMode)&&
-                        this.state.firstname
+                        this.props.client.firstname
                     }
                 </td>
                 <td className="Client_lastname">
                     {
                         (this.state.editMode)&&
-                        <input type="text" ref={this.setNewLastnameRef} defaultValue={this.state.lastname} />
+                        <input type="text" ref={this.setNewLastnameRef} defaultValue={this.props.client.lastname} />
                     }
                     {
                         (!this.state.editMode)&&
-                        this.state.lastname
+                        this.props.client.lastname
                     }
                 </td>
                 <td className="Client_balance">
                     {
                         (this.state.editMode)&&
-                        <input type="text" ref={this.setNewBalanceRef} defaultValue={this.state.balance} />
+                        <input type="text" ref={this.setNewBalanceRef} defaultValue={this.props.client.balance} />
                     }
                     {
                         (!this.state.editMode)&&
-                        this.state.balance
+                        this.props.client.balance
                     }
                 </td>
                 <td className={"Client_status " + this.state.status}>{this.state.status}</td>
