@@ -38,7 +38,6 @@ export default function Filter(props){
     const reset = () => {
         setSortAZ(false);
         setSearchString('');
-        setWords(props.words);
     }
 
     return(
