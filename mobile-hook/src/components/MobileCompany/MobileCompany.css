@@ -1,0 +1,14 @@
+.Mobile-company{
+    max-width: 40%;
+    margin: 10px;
+}
+.Mobile-company__buttons{
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.Mobile-company table thead{
+    font-weight: 500;
+    background-color: rgb(192, 192, 192);
+}
