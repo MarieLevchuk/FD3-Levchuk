@@ -7,11 +7,11 @@ import MobileCompany from './components/MobileCompany/MobileCompany';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <MobileCompany clients={clients}/>
+    <MobileCompany initclients={clients}/>
 );
 // root.render(
 //   <React.StrictMode>
-//     <MobileCompany clients={clients}/>
+//     <MobileCompany initclients={clients}/>
 //   </React.StrictMode>
 // );
 reportWebVitals();

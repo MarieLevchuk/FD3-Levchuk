@@ -1,95 +1,80 @@
-import React from "react";
+import { useEffect, useMemo, useState } from "react";
+import {default as Client} from "../Client/Client.jsx";
 import './MobileCompany.css';
-import Client from "../Client/Client";
-import clientsEvents from '../../events/clientsEvents.js';
+import clientsEvents from "../../events/clientsEvents.js";
 
-export default class MobileCompany extends React.PureComponent{
-    state = {
-        clients: this.props.clients,
-        clientsData: this.props.clients,
 
-        filterMode: 'all'
-    }
+export default function MobileCompany({initclients}){
 
-    componentDidMount = () => {
-        clientsEvents.addListener('filter', this.filter);
-
-        clientsEvents.addListener('edit', this.edit);
-        clientsEvents.addListener('delete', this.delete);
-    };
-
-    componentWillUnmount = () => {
-        clientsEvents.removeListener('filter', this.filter);
-
-        clientsEvents.removeListener('edit', this.edit);
-        clientsEvents.removeListener('delete', this.delete);
-    };
-
-    handleFilter = (e) => {
-        this.setState({filterMode: e.target.value}, this.filter);
-    }
-
-    filter = () => {
-        if (this.state.filterMode === 'all'){
-            this.setState({clients: this.state.clientsData});
-        }
+    const [clientsData, setClientsData] = useState(initclients);
+    const [clients, setClients] = useState([]);
+    const [filterMode, setFilterMode] = useState("all");
     
-        if (this.state.filterMode === 'active'){
-            let clientsDataCopy = this.state.clientsData.filter(item => item.balance > 0);
-            this.setState({clients: clientsDataCopy});
+    useEffect(() => {
+        clientsEvents.addListener('delete', deleteClient);
+        clientsEvents.addListener('edit', editClient);
+        return () => {
+            clientsEvents.removeListener('delete', deleteClient);
+            clientsEvents.removeListener('edit', editClient);
         }
+    }, []);
     
-        if (this.state.filterMode === 'blocked'){
-            let clientsDataCopy = this.state.clientsData.filter(item => item.balance <= 0);
-            this.setState({clients: clientsDataCopy});
+    useEffect(()=>{
+        if (filterMode === 'all'){
+            setClients(clientsData);
         }
-    }
 
-    getMaxClientId(){
-        let max = this.state.clientsData.reduce((prev, current) => {
+        if (filterMode === 'active'){
+            setClients(clientsData.filter(item => item.balance > 0));
+        }
+
+        if (filterMode === 'blocked'){
+            setClients(clientsData.filter(item => item.balance <= 0));
+        }
+    }, [filterMode]);
+
+    useEffect(()=>{
+        setClients(clientsData);
+    }, [clientsData]);
+
+    const memoizedClients = useMemo(()=>{
+        return clients.map(client => <Client key={client.id} client={client} />)
+    }, [clients]);
+    
+
+    function getMaxClientId(){
+        let max = clientsData.reduce((prev, current) => {
             return (prev.id > current.id) ? prev : current;
         });
 
         return max.id;
     }
 
-    create = () => {
+    const createClient = () => {
         let newClient = {
-            id: this.getMaxClientId()+1,
+            id: getMaxClientId()+1,
             firstname: '-',
             lastname: '-',
             balance: 0
-        }
+        };
 
-        let clientsDataCopy = [...this.state.clientsData];
-        clientsDataCopy.push(newClient);
+        setClientsData(prev => [...prev, newClient]);
+    };
 
-        this.setState({clients:clientsDataCopy, clientsData: clientsDataCopy});
+    const editClient = (model) => {
+        setClientsData(prev => prev.map(client => client.id == model.id ? {...model} : client));
+    };
+
+    const deleteClient = (id) => {       
+        setClientsData(prev => prev.filter(item => item.id !=id));
     }
 
-    edit = (model) => {
-        let clientsDataCopy = [...this.state.clientsData];
-        clientsDataCopy.forEach((client, index) => {
-            if(client.id == model.id){
-                clientsDataCopy[index] = model;
-                this.setState({clients: clientsDataCopy, clientsData: clientsDataCopy}, () => clientsEvents.emit('close'));
-            }
-        });
-    }
-
-    delete = (id) => {
-        let clientsDataCopy = this.state.clientsData.filter(item => item.id !=id);
-        let clientsCopy = this.state.clients.filter(item => item.id !=id);
-        this.setState({clients: clientsCopy, clientsData: clientsDataCopy});
-    }
-
-    render(){
-        return(
-            <div className="Mobile-company">
-                <div className="Mobile-company__buttons">
-                    <input type="button" value='all' onClick={this.handleFilter} />
-                    <input type="button" value='active'  onClick={this.handleFilter} />
-                    <input type="button" value='blocked'  onClick={this.handleFilter} />
+    return(
+        <div className="Mobile-company">
+            <div className="Mobile-company__buttons">
+                    <input type="button" value='all' onClick={(e) => setFilterMode(e.target.value)} />
+                    <input type="button" value='active' onClick={(e) => setFilterMode(e.target.value)} />
+                    <input type="button" value='blocked' onClick={(e) => setFilterMode(e.target.value)} />
                 </div>
                 <table>
                     <thead>
@@ -103,13 +88,10 @@ export default class MobileCompany extends React.PureComponent{
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            this.state.clients.map(client => <Client key={client.id} client={client} />)
-                        }
+                        { memoizedClients }
                     </tbody>
                 </table>
-                <input type="button" value='add a new client' onClick={this.create} />
-            </div>
-        );
-    }
+                <input type="button" value='add a new client' onClick={createClient} />
+        </div>
+    );
 }
