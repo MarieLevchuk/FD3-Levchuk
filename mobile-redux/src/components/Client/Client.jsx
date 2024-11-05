@@ -14,6 +14,8 @@ function Client({client}){
 
     const status = client.balance > 0 ? 'active' : 'blocked';    
 
+    console.log(`client ${client.id} render()`);
+
     return (
         <TableRow id={client.id}>
             <TableCell>

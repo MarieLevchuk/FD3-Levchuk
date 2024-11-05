@@ -8,14 +8,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { clientCreate, clientEdit, clientDelete } from "../../redux/clientsSlice";
 
-export default function MobileCompany({initclients}){
-    const [clientsData, setClientsData] = useState(initclients);
-    const [clients, setClients] = useState(initclients);
+export default function MobileCompany(){
+
+    const clientsData = useSelector(state => state.clients);
+
+    const [filterMode, setFilterMode] = useState('all');
+    const [clients, setClients] = useState([]);
 
     useEffect(()=>{
-        setClients(clientsData);
-    }, [clientsData]);
+        setClients(clientsData.clients);
+    }, [clientsData.clients]);
 
     const memoizedClients = useMemo(()=>{
         return clients.map(client => <Client key={client.id} client={client} />)
@@ -25,9 +30,9 @@ export default function MobileCompany({initclients}){
     return (
         <div className="Mobile-company">
             <div className="Mobile-company__buttons">
-                <Button variant="contained" size="small" value="all" onClick={(e) => console.log(e.target.value)}>All</Button>
-                <Button variant="contained" size="small" value="active" onClick={(e) => console.log(e.target.value)}>Active</Button>
-                <Button variant="contained" size="small" value="blocked" onClick={(e) => console.log(e.target.value)}>Blocked</Button>
+                <Button variant="contained" size="small" value="all" onClick={(e) => setFilterMode(e.target.value)}>All</Button>
+                <Button variant="contained" size="small" value="active" onClick={(e) => setFilterMode(e.target.value)}>Active</Button>
+                <Button variant="contained" size="small" value="blocked" onClick={(e) => setFilterMode(e.target.value)}>Blocked</Button>
             </div>
 
             <TableContainer component={Paper}>
@@ -43,7 +48,7 @@ export default function MobileCompany({initclients}){
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* { initclients.map(client => <Client key={client.id} client={client} />) } */}
+                        {/* { clientsData.clients.map(client => <Client key={client.id} client={client} />) } */}
                         { memoizedClients }
                     </TableBody>
                 </Table>
