@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import clientsData from '../clients.json';
 
 const initialState = {
-    clients: clientsData
+    clients: clientsData,
+    filteredClients: clientsData
 }
 
 export const clientsSlice = createSlice({
@@ -10,25 +11,31 @@ export const clientsSlice = createSlice({
     initialState,
     reducers: {
         clientCreate: (state, action) => {
-            state.clients += action.payload;
+            state.clients.push(action.payload);
+            state.filteredClients = state.clients;
         },
         clientEdit: (state, action) => {
             state.clients = state.clients.map(client => client.id == action.payload.id ? action.payload : client);
+            state.filteredClients = state.clients;
         },
         clientDelete: (state, action) => {
             state.clients = state.clients.filter(client => client.id != action.payload.id);
+            state.filteredClients = state.clients;
         },
-        clientFilter: (state, action) => {
+        clientsFilter: (state, action) => {
             switch(action.payload){
                 case 'active':
                     console.log('filtered active');
-                    
+                    state.filteredClients = state.clients.filter(item => item.balance > 0);
                     break;
                 case 'blocked':
                     console.log('filtered blocked');
+                    state.filteredClients = state.clients.filter(item => item.balance <= 0);
                     break;
+                case 'all':
                 default:
                     console.log('filtered all');
+                    state.filteredClients = state.clients;
                     break;
             }
         },
@@ -36,6 +43,6 @@ export const clientsSlice = createSlice({
     }
 });
 
-export const { clientCreate, clientEdit, clientDelete } = clientsSlice.actions;
+export const { clientCreate, clientEdit, clientDelete, clientsFilter } = clientsSlice.actions;
 
 export default clientsSlice.reducer;
