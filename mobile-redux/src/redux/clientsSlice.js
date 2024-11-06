@@ -19,22 +19,19 @@ export const clientsSlice = createSlice({
             state.filteredClients = state.clients;
         },
         clientDelete: (state, action) => {
-            state.clients = state.clients.filter(client => client.id != action.payload.id);
+            state.clients = state.clients.filter(client => client.id != action.payload);
             state.filteredClients = state.clients;
         },
         clientsFilter: (state, action) => {
             switch(action.payload){
                 case 'active':
-                    console.log('filtered active');
                     state.filteredClients = state.clients.filter(item => item.balance > 0);
                     break;
                 case 'blocked':
-                    console.log('filtered blocked');
                     state.filteredClients = state.clients.filter(item => item.balance <= 0);
                     break;
                 case 'all':
                 default:
-                    console.log('filtered all');
                     state.filteredClients = state.clients;
                     break;
             }

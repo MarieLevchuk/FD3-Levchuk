@@ -7,12 +7,39 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import clientsEvents from '../../events/clientsEvents';
 
 function Client({client}){
     const [editMode, setEditMode] = useState(false);
 
-    const status = client.balance > 0 ? 'active' : 'blocked';    
+    const status = client.balance > 0 ? 'active' : 'blocked';   
+    
+    const firstnameRef = useRef(client.firstname);
+    const lastnameRef = useRef(client.lastname);
+    const balanceRef = useRef(client.balance);
+
+    const close = () => {
+        setEditMode(false);     
+    }
+
+    function handleSave (){
+        let editedClient = {
+            id: client.id,
+            firstname: firstnameRef.current.value,
+            lastname: lastnameRef.current.value,
+            balance: balanceRef.current.value
+        };        
+
+        clientsEvents.emit('edit', editedClient);
+        close();    
+    }
+
+    function handleDelete(){
+        if(window.confirm('Delete client?')){
+            clientsEvents.emit('remove', client.id);
+        }        
+    }
 
     console.log(`client ${client.id} render()`);
 
@@ -21,7 +48,7 @@ function Client({client}){
             <TableCell>
                 {
                     (editMode)&&
-                    <TextField size="small" defaultValue={client.firstname}  />
+                    <TextField size="small" inputRef={firstnameRef} defaultValue={client.firstname}  />
                 }
                 {
                     (!editMode)&&
@@ -31,7 +58,7 @@ function Client({client}){
             <TableCell>
                 {
                     (editMode)&&
-                    <TextField size="small" defaultValue={client.lastname}  />
+                    <TextField size="small" inputRef={lastnameRef} defaultValue={client.lastname}  />
                 }
                 {
                     (!editMode)&&
@@ -41,7 +68,7 @@ function Client({client}){
             <TableCell>
                 {
                     (editMode)&&
-                    <TextField size="small" defaultValue={client.balance}  />
+                    <TextField size="small" inputRef={balanceRef} defaultValue={client.balance}  />
                 }
                 {
                     (!editMode)&&
@@ -59,10 +86,10 @@ function Client({client}){
                 {
                     (editMode)&&
                     <>
-                        <IconButton aria-label="edit" size="small"  onClick={() => setEditMode(false)}>
+                        <IconButton aria-label="edit" size="small"  onClick={handleSave}>
                             <DoneIcon fontSize="inherit" />
                         </IconButton>
-                        <IconButton aria-label="edit" size="small"  onClick={() => setEditMode(false)}>
+                        <IconButton aria-label="edit" size="small"  onClick={close}>
                             <CloseIcon fontSize="inherit" />
                         </IconButton>
                     </>
@@ -70,7 +97,7 @@ function Client({client}){
                 
             </TableCell>
             <TableCell>
-                <IconButton aria-label="delete" size="small">
+                <IconButton aria-label="delete" size="small"  onClick={handleDelete}>
                     <DeleteIcon fontSize="inherit" />
                 </IconButton>
             </TableCell>

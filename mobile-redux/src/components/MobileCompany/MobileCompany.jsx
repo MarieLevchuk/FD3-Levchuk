@@ -7,46 +7,34 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clientCreate, clientEdit, clientDelete, clientsFilter } from "../../redux/clientsSlice";
+import clientsEvents from "../../events/clientsEvents";
 
 export default function MobileCompany(){
 
     const clientsData = useSelector(state => state.clients);
-    // const clients = useSelector(state => state.filteredClients);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();    
 
-    // console.log(clientsData);
-    // console.log(clients);
-    
+    useEffect(() => {
+        clientsEvents.addListener('remove', remove);
+        clientsEvents.addListener('edit', edit);
+        return () => {
+            clientsEvents.removeListener('remove', remove);
+            clientsEvents.removeListener('edit', edit);
+        }
+    }, []);
 
-    const [filterMode, setFilterMode] = useState('all');
-    // const [clients, setClients] = useState([]);
-
-    // useEffect(()=>{
-    //     setClients(clientsData.clients);
-    // }, [clientsData]);
-
-    // useEffect(()=>{
-    //     if (filterMode === 'all'){
-    //         setClients(clientsData.clients);
-    //     }
-
-    //     if (filterMode === 'active'){
-    //         setClients(clientsData.clients.filter(item => item.balance > 0));
-    //     }
-
-    //     if (filterMode === 'blocked'){
-    //         setClients(clientsData.clients.filter(item => item.balance <= 0));
-    //     }
-    // }, [filterMode]);
-    // debugger;
     const memoizedClients = useMemo(()=>{
         return clientsData.filteredClients.map(client => <Client key={client.id} client={client} />)
     }, [clientsData.filteredClients]);
 
     function getMaxClientId(){
+        if(clientsData.clients.length == 0){
+            return 0;
+        }
+
         let max = clientsData.clients.reduce((prev, current) => {
             return (prev.id > current.id) ? prev : current;
         });
@@ -65,6 +53,14 @@ export default function MobileCompany(){
         dispatch( clientCreate(newClient) );
     }
 
+    function edit(model) {
+        dispatch( clientEdit(model) );
+    }
+
+    function remove(id) {
+        dispatch( clientDelete(id) );
+    }
+
     function filter(e) {
         dispatch( clientsFilter(e.target.value) );
     }
@@ -76,9 +72,6 @@ export default function MobileCompany(){
                 <Button variant="contained" size="small" value="all" onClick={filter}>All</Button>
                 <Button variant="contained" size="small" value="active" onClick={filter}>Active</Button>
                 <Button variant="contained" size="small" value="blocked" onClick={filter}>Blocked</Button>
-                {/* <Button variant="contained" size="small" value="all" onClick={(e) => setFilterMode(e.target.value)}>All</Button>
-                <Button variant="contained" size="small" value="active" onClick={(e) => setFilterMode(e.target.value)}>Active</Button>
-                <Button variant="contained" size="small" value="blocked" onClick={(e) => setFilterMode(e.target.value)}>Blocked</Button> */}
             </div>
 
             <TableContainer component={Paper}>
@@ -94,7 +87,6 @@ export default function MobileCompany(){
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* { clientsData.clients.map(client => <Client key={client.id} client={client} />) } */}
                         { memoizedClients }
                     </TableBody>
                 </Table>
