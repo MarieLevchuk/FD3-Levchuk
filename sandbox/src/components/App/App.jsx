@@ -1,7 +1,11 @@
+import SwrData from "../SwrData/SwrData";
+
 export default function App() {
     return(
         <div className="App">
-            App
+            sandbox App
+
+            <SwrData />
         </div>
     );
 }
