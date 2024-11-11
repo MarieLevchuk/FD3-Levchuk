@@ -15,8 +15,8 @@ function Client({client}){
 
     const status = client.balance > 0 ? 'active' : 'blocked';   
     
-    const firstnameRef = useRef(client.firstname);
-    const lastnameRef = useRef(client.lastname);
+    const imRef = useRef(client.im);
+    const famRef = useRef(client.fam);
     const balanceRef = useRef(client.balance);
 
     const close = () => {
@@ -26,8 +26,8 @@ function Client({client}){
     function handleSave (){
         let editedClient = {
             id: client.id,
-            firstname: firstnameRef.current.value,
-            lastname: lastnameRef.current.value,
+            im: imRef.current.value,
+            fam: famRef.current.value,
             balance: balanceRef.current.value
         };        
 
@@ -48,21 +48,21 @@ function Client({client}){
             <TableCell>
                 {
                     (editMode)&&
-                    <TextField size="small" inputRef={firstnameRef} defaultValue={client.firstname}  />
+                    <TextField size="small" inputRef={imRef} defaultValue={client.im}  />
                 }
                 {
                     (!editMode)&&
-                    client.firstname
+                    client.im
                 }
             </TableCell>
             <TableCell>
                 {
                     (editMode)&&
-                    <TextField size="small" inputRef={lastnameRef} defaultValue={client.lastname}  />
+                    <TextField size="small" inputRef={famRef} defaultValue={client.fam}  />
                 }
                 {
                     (!editMode)&&
-                    client.lastname
+                    client.fam
                 }
             </TableCell>
             <TableCell>

@@ -11,13 +11,20 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clientCreate, clientEdit, clientDelete, clientsFilter } from "../../redux/clientsSlice";
 import clientsEvents from "../../events/clientsEvents";
+import { clientsLoad } from "../../redux/clientsLoad";
 
 export default function MobileCompany(){
 
     const clientsData = useSelector(state => state.clients);
-    const dispatch = useDispatch();    
+    const dispatch = useDispatch();   
+    
+    function loadData() {
+        dispatch(clientsLoad);
+    }   
 
     useEffect(() => {
+        loadData();
+
         clientsEvents.addListener('remove', remove);
         clientsEvents.addListener('edit', edit);
         return () => {
@@ -25,7 +32,7 @@ export default function MobileCompany(){
             clientsEvents.removeListener('edit', edit);
         }
     }, []);
-
+    
     const memoizedClients = useMemo(()=>{
         return clientsData.filteredClients.map(client => <Client key={client.id} client={client} />)
     }, [clientsData.filteredClients]);
@@ -65,6 +72,17 @@ export default function MobileCompany(){
         dispatch( clientsFilter(e.target.value) );
     }
     
+    // render
+    if(clientsData.dataLoadState===0){
+        return <>no data</>
+    }
+    
+    if(clientsData.dataLoadState===1){
+        return <>loading...</>
+    }
+    if(clientsData.dataLoadState===3){
+        return <>error: {clientsData.dataLoadError}</>
+    }
 
     return (
         <div className="Mobile-company">
@@ -95,4 +113,5 @@ export default function MobileCompany(){
             <Button variant="contained" size="small" value="create" onClick={create}>add a new client</Button>
         </div>
     );
+
 }
