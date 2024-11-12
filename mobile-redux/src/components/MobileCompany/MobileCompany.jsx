@@ -9,9 +9,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clientCreate, clientEdit, clientDelete, clientsFilter } from "../../redux/clientsSlice";
+import { clientCreate, clientEdit, clientDelete } from "../../redux/clientsSlice";
 import clientsEvents from "../../events/clientsEvents";
 import { clientsLoad } from "../../redux/clientsLoad";
+import { useState } from "react";
 
 export default function MobileCompany(){
 
@@ -21,6 +22,9 @@ export default function MobileCompany(){
     function loadData() {
         dispatch(clientsLoad);
     }   
+
+    const [clients, setClients] = useState([]);
+    const [filterMode, setFilterMode] = useState('all');
 
     useEffect(() => {
         loadData();
@@ -32,10 +36,28 @@ export default function MobileCompany(){
             clientsEvents.removeListener('edit', edit);
         }
     }, []);
+
+    useEffect(()=>{
+        if (filterMode === 'all'){
+            setClients(clientsData.clients);
+        }
+
+        if (filterMode === 'active'){
+            setClients(clientsData.clients.filter(item => item.balance > 0));
+        }
+
+        if (filterMode === 'blocked'){
+            setClients(clientsData.clients.filter(item => item.balance <= 0));
+        }
+    }, [filterMode]);
     
+    useEffect(()=>{
+        setClients(clientsData.clients);
+    }, [clientsData.clients]);
+
     const memoizedClients = useMemo(()=>{
-        return clientsData.filteredClients.map(client => <Client key={client.id} client={client} />)
-    }, [clientsData.filteredClients]);
+        return clients.map(client => <Client key={client.id} client={client} />)
+    }, [clients]);
 
     function getMaxClientId(){
         if(clientsData.clients.length == 0){
@@ -67,10 +89,6 @@ export default function MobileCompany(){
     function remove(id) {
         dispatch( clientDelete(id) );
     }
-
-    function filter(e) {
-        dispatch( clientsFilter(e.target.value) );
-    }
     
     // render
     if(clientsData.dataLoadState===0){
@@ -87,9 +105,9 @@ export default function MobileCompany(){
     return (
         <div className="Mobile-company">
             <div className="Mobile-company__buttons">
-                <Button variant="contained" size="small" value="all" onClick={filter}>All</Button>
-                <Button variant="contained" size="small" value="active" onClick={filter}>Active</Button>
-                <Button variant="contained" size="small" value="blocked" onClick={filter}>Blocked</Button>
+                <Button variant="contained" size="small" value="all" onClick={(e) => setFilterMode(e.target.value)}>All</Button>
+                <Button variant="contained" size="small" value="active" onClick={(e) => setFilterMode(e.target.value)}>Active</Button>
+                <Button variant="contained" size="small" value="blocked" onClick={(e) => setFilterMode(e.target.value)}>Blocked</Button>
             </div>
 
             <TableContainer component={Paper}>
